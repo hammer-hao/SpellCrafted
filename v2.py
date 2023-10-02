@@ -20,9 +20,9 @@ n_heads = 6
 n_layers = 6
 dropout=0.2
 
-with open('mtgdata.pickle', 'rb') as file:
-    mtg_df=pickle.load(file)
-#mtg_df=pd.read_csv('mtg_data.csv', index_col=0)
+#with open('mtgdata.pickle', 'rb') as file:
+#    mtg_df=pickle.load(file)
+mtg_df=pd.read_csv('mtg_data.csv', index_col=0)
 
 mtg_df=mtg_df.dropna(subset='text')
 
@@ -227,6 +227,6 @@ for iter in range(max_iters):
 
 torch.save(m.state_dict(), 'mtggenerator.pt')
 
-#context= torch.zeros((1,1), dtype=torch.long, device=device)
-context= torch.tensor([encode('My little Pony:\n')], dtype=torch.long, device=device)
+context= torch.zeros((1,1), dtype=torch.long, device=device)
+#context= torch.tensor([encode('My little Pony:\n')], dtype=torch.long, device=device)
 print(decode(m.generate(context, max_new_tokens=250)[0].tolist()))
