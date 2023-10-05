@@ -242,4 +242,4 @@ def generate(cardname):
     for slice in slices:
         print(decode(slice))
 
-generate('Dragon Phoenix')
+generate('The Big Bang')
