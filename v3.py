@@ -12,13 +12,13 @@ from tokenizers import Tokenizer
 
 #logging
 from loguru import logger
-logger.add("mtggenerator_{time}.log")
+logger.add("mtggenerator_v3_{time}.log")
 
 torch.manual_seed(69)
 batch_size=512
 block_size=36
 sampling_size=24
-max_iters=5000
+max_iters=7000
 eval_interval=300
 learning_rate=3e-4
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -27,6 +27,13 @@ n_embd = 64
 n_heads = 4
 n_layers = 5
 dropout=0.3
+
+logger.debug(f'batch_size={batch_size}')
+logger.debug(f'block_size={block_size}')
+logger.debug(f'sampling_size={sampling_size}')
+logger.debug(f'batch_size={n_embd}')
+logger.debug(f'batch_size={n_heads}')
+logger.debug(f'batch_size={n_layers}')
 
 #with open('mtgdata.pickle', 'rb') as file:
 #    mtg_df=pickle.load(file)
@@ -230,7 +237,7 @@ for iter in range(max_iters):
     loss.backward()
     optimizer.step()
 
-torch.save(m.state_dict(), 'mtggenerator.pt')
+torch.save(m.state_dict(), 'mtggenerator_v3.pt')
 
 #context= torch.zeros((1,1), dtype=torch.long, device=device)
 def generate(cardname):

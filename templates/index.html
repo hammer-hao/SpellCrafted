@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block head %}
+<title>mtggenerator</title>
+{% endblock%}
+{% block body %}
+<div class="search__container">
+<form class="search__form" action="/" method="POST">
+    <!--<input type="text" name="name" id="content">
+    <input type="submit" value="search">-->
+    <input class="search__input" type="text" name="prompt" placeholder="Enter your Card name!">
+    <button type="submit" class="search__submit">
+        Generate
+    </button>
+</form>
+</div>
+<p> {{response}} </p>
+{% endblock %}
