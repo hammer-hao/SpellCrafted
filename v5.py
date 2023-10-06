@@ -176,6 +176,7 @@ class MTGCardGenerator(nn.Module):
         self.token_embedding_table=nn.Embedding(vocab_size, n_embd) #each token directly look up the logit of the next token from a lookup table
         self.lmhead=nn.Linear(n_embd, vocab_size)
         self.position_embedding_table=nn.Embedding(block_size, n_embd) #each token gets a position embeding of block_size, stores the relative position of token in the block
+
         self.block=nn.Sequential(*[Block(n_embd, n_head=n_heads) for _ in range(n_layers)])
     
     def forward(self, idx, targets=None):
