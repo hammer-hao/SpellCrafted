@@ -12,12 +12,12 @@ app = Flask(__name__)
 def index():
     if request.method=="POST":
         if len(request.form['prompt'])==0:
-            return render_template('index.html', response='empty')
+            return render_template('index.html', response='[empty]')
         else:
             response=generate(request.form['prompt'])
             return render_template('index.html', response=response)
     else:
-        return render_template('index.html', response='empty')
+        return render_template('index.html', response='[empty]')
     
 if __name__=='__main__':
     app.run()
