@@ -151,8 +151,6 @@ def generate(cardname):
     response=m.generate(context, max_new_tokens=250)[0].tolist()
     indices = [i for i, x in enumerate(response) if x == 2]
     slices = [response[i+1:j] for i, j in zip([0] + indices, indices + [None])]
-    out=''
-    for slice in slices:
-        out+=decode(slice)
-    return out
+    out = [decode(slice) for slice in slices]
+    return cardname, ' '.join(out)
 generate('The Big Bang')
