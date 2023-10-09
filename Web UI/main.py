@@ -25,7 +25,7 @@ prompt_con <= INPUT(id='prompt', Class='prompt_input')
 
 document <= prompt_con
 
-generating = DIV('Generating...', Class='generating_icon')
+generating = DIV(Class='generating_icon')
 
 
 @bind(card_back, 'click')
@@ -36,6 +36,8 @@ def generate(ev):
              cache=True,
              oncomplete=show_generated_card)
     document <= generating
+    generating.text = 'Generating...'
+    generating.classList.remove('reset')
 
 
 def show_generated_card(resp):
@@ -57,4 +59,5 @@ def show_generated_card(resp):
         card_gen.style.display = 'none'
         card_back.style.display = 'initial'
         ev.target.remove()
+        ev.target.unbind('click', reset_card)
 

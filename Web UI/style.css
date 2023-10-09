@@ -10,13 +10,13 @@ body {
     display: flex;
     margin-top: 5vh;
     justify-content: center;
-    cursor: pointer;
 }
 
 .card_container{
     background-size: 100% 100%;
     border-radius: 15px;
     box-shadow: 0 0 10px gray;
+    cursor: pointer;
 }
 
 .card_container DIV{
@@ -93,6 +93,7 @@ body {
 
 #card_name{
     top: 6%;
+    min-height: 18px;
 }
 
 #card_cost{
@@ -102,4 +103,5 @@ body {
 #card_des{
     top: 56%;
     max-height: 23%;
+    overflow-y: scroll;
 }
