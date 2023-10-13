@@ -16,6 +16,9 @@ body {
     background-size: 100% 100%;
     border-radius: 15px;
     box-shadow: 0 0 10px gray;
+}
+
+.pointer{
     cursor: pointer;
 }
 
@@ -103,5 +106,11 @@ body {
 #card_des{
     top: 56%;
     max-height: 23%;
-    overflow-y: scroll;
+    overflow-y: auto;
+}
+
+.icon{
+    display: inline;
+    height: 1.2em;
+    vertical-align: middle;
 }

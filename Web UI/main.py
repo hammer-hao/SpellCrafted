@@ -1,5 +1,6 @@
 from browser import ajax, document, bind
 from browser.html import *
+import re
 
 
 def card_container(img_path, con_id, card_w=969, card_h=1352, card_display_h=50):
@@ -14,10 +15,13 @@ card_pos = DIV(Class='card_pos')
 
 card_gen = card_container('img/card_template.png', 'card_gen')
 card_gen <= DIV(id='card_name') + DIV(id='card_cost') + DIV(id='card_des')
+card_pos <= card_gen
 
 card_back = card_container('img/card_back.png', 'card_back')
 card_pos <= card_back
 document <= card_pos
+document['card_gen'].style.display = 'none'
+document['card_back'].classList.add('pointer')
 
 prompt_con = DIV(Class='prompt_container')
 prompt_con <= INPUT(id='prompt', Class='prompt_input')
@@ -47,9 +51,17 @@ def show_generated_card(resp):
     card_back.style.display = 'none'
     card_pos <= card_gen
     card_gen.style.display = 'initial'
+
     document['card_name'].text = resp['name']
     document['card_cost'].text = resp['cost']
-    document['card_des'].text = resp['description']
+    des = re.sub('\{.\}', '#', resp['description']).split('#')
+    des_icon = re.findall('\{.\}', resp['description'])
+    print(des)
+    print(des_icon)
+    for s in range(len(des)):
+        if s >= 1:
+            document['card_des'] <= IMG(src=f'card_icon/mana-{des_icon[s - 1][1].lower()}.png', Class='icon')
+        document['card_des'] <= SPAN(des[s])
 
     generating.text = 'Reset'
     generating.classList.add('reset')
@@ -58,6 +70,7 @@ def show_generated_card(resp):
     def reset_card(ev):
         card_gen.style.display = 'none'
         card_back.style.display = 'initial'
+        document['card_des'].innerHTML = ''
+
         ev.target.remove()
         ev.target.unbind('click', reset_card)
-
