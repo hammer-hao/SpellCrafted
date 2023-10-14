@@ -91,12 +91,12 @@ body {
 #card_name, #card_cost, #card_des{
     position: relative;
     left: 10%;
-    max-width: 78%;
+    width: 80%;
+    height: 18px;
 }
 
 #card_name{
     top: 6%;
-    min-height: 18px;
 }
 
 #card_cost{
@@ -104,8 +104,8 @@ body {
 }
 
 #card_des{
-    top: 56%;
-    max-height: 23%;
+    top: 55.5%;
+    height: 26%;
     overflow-y: auto;
 }
 

@@ -54,15 +54,24 @@ def show_generated_card(resp):
 
     document['card_name'].text = resp['name']
     document['card_cost'].text = resp['cost']
+    # print(len(resp['cost']), document['card_cost'].width / 16)
+    document['card_cost'].style.fontSize = f"{document['card_cost'].height / document['card_cost'].scrollHeight * 100}%"
+
     des = re.sub('\{.\}', '#', resp['description']).split('#')
     des_icon = re.findall('\{.\}', resp['description'])
+    des_con = document['card_des']
     print(des)
     print(des_icon)
+    print()
+    # des_con <= SPAN("Destroy target creature with power 4 or greater. Its controller may return all nonland cards from your graveyard to the battlefield. 4: Look at the top X cards of your library equal to the number of creature cards revealed this turn. You may put that many + 1 /+ 1 counters on it instead. If that card has no mana value 4 or greater than put into your graveyard from the top of your library instead Horde ' s graveyard: Choose a card name. You may look at the top card of your library. Draw 2 cards, then put it into your hand. If it shares a spell from your hand, put the rest into your hand and the rest on the bottom of your library.) Whenever you draw up to one target creature deals damage to a player, you draw two cards.")
     for s in range(len(des)):
         if s >= 1:
-            document['card_des'] <= IMG(src=f'card_icon/mana-{des_icon[s - 1][1].lower()}.png', Class='icon')
-        document['card_des'] <= SPAN(des[s])
+            des_con <= IMG(src=f'card_icon/mana-{des_icon[s - 1][1].lower()}.png', Class='icon')
+        des_con <= SPAN(des[s])
 
+    # des_con.style.fontSize = f"{des_con.height /
+    # (-0.002285 * des_con.scrollHeight ** 2 + 1.4979 * des_con.scrollHeight - 26.6) * 16}px "
+    des_con.style.fontSize = f"{des_con.height / des_con.scrollHeight * 100}%"
     generating.text = 'Reset'
     generating.classList.add('reset')
 
