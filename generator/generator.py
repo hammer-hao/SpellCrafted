@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 from tokenizers import Tokenizer
 from torch.nn import functional as F
+import re
 
 batch_size=512
 block_size=36
@@ -151,6 +152,14 @@ def generate(cardname):
     response=m.generate(context, max_new_tokens=250)[0].tolist()
     indices = [i for i, x in enumerate(response) if x == 2]
     slices = [response[i+1:j] for i, j in zip([0] + indices, indices + [None])]
-    out = [decode(slice) for slice in slices]
-    return cardname, ' '.join(out)
-generate('The Big Bang')
+    out = [re.sub(r'{+\s', r'{', re.sub(r'\s+}', r'}', re.sub(r'\s+([.,!?:])', r'\1', decode(slice)))).replace('~', cardname) for slice in slices]
+    try:
+        mana=out[1]
+        type=out[2]
+        desc=out[3]
+    except IndexError:
+        mana='Error'
+        type='Error'
+        desc='Try Again'
+    return cardname, mana, type, desc
+generate('boy')
