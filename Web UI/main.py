@@ -83,3 +83,8 @@ def show_generated_card(resp):
 
         ev.target.remove()
         ev.target.unbind('click', reset_card)
+
+
+@bind(document['prompt'], 'change')
+def capitalize_input(ev):
+    ev.target.value = ev.target.value.capitalize()
