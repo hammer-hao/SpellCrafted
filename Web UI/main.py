@@ -14,7 +14,9 @@ def card_container(img_path, con_id, card_w=969, card_h=1352, card_display_h=50)
 card_pos = DIV(Class='card_pos')
 
 card_gen = card_container('img/card_template.png', 'card_gen')
-card_gen <= DIV(id='card_name') + DIV(id='card_cost') + DIV(id='card_des')
+card_title = DIV(id='card_title')
+card_title <= DIV(id='card_name') + DIV(id='card_mana')
+card_gen <= card_title + DIV(id='card_cost') + DIV(id='card_des')
 card_pos <= card_gen
 
 card_back = card_container('img/card_back.png', 'card_back')
@@ -53,6 +55,10 @@ def show_generated_card(resp):
     card_gen.style.display = 'initial'
 
     document['card_name'].text = resp['name']
+    mana = resp['mana'].replace('{', '').replace('}', '')
+    for m in mana:
+        document['card_mana'] <= IMG(src=f'card_icon/mana-{m}.png', Class='icon')
+    document['card_gen'].style.backgroundImage = f"url(card/{mana[-1]}.jpg)"
     document['card_cost'].text = resp['cost']
     # print(len(resp['cost']), document['card_cost'].width / 16)
     document['card_cost'].style.fontSize = f"{document['card_cost'].height / document['card_cost'].scrollHeight * 100}%"
@@ -80,6 +86,7 @@ def show_generated_card(resp):
         card_gen.style.display = 'none'
         card_back.style.display = 'initial'
         document['card_des'].innerHTML = ''
+        document['card_mana'].innerHTML = ''
 
         ev.target.remove()
         ev.target.unbind('click', reset_card)
