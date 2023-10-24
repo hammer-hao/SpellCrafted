@@ -7,16 +7,26 @@ body {
 }
 
 .card_pos{
-    display: flex;
-    margin-top: 5vh;
-    justify-content: center;
+    margin: 5vh auto 0;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
 }
 
 .card_container{
     background-size: 100% 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
     border-radius: 19px;
     box-shadow: 0 0 10px gray;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
 }
+
+.flip_card{
+    transform: rotateY(180deg);
+}
+
 
 .pointer{
     cursor: pointer;
