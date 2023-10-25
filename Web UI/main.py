@@ -57,7 +57,7 @@ def show_generated_card(resp):
         generating.text = '寄'
     else:
         card_pos.classList.add('flip_card')
-        print(resp.json)
+        print(resp)
 
         document['card_des'].innerHTML = ''
         document['card_mana'].innerHTML = ''
