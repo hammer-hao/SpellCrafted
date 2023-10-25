@@ -63,7 +63,7 @@ def show_generated_card(resp):
         document['card_mana'].innerHTML = ''
 
         document['card_name'].text = resp['name']
-        mana = resp['mana'].replace('{', '').replace('}', '')
+        mana = resp['mana'].replace('{', '').replace('}', '').lower()
         for m in mana:
             document['card_mana'] <= IMG(src=f'card_icon/mana-{m}.png', Class='icon')
         document['card_gen'].style.backgroundImage = f"url(card/{mana[-1]}.jpg)"
