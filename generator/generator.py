@@ -18,7 +18,8 @@ n_embd = 64
 n_heads = 4
 n_layers = 5
 dropout=0.3
-vocab_size=29500
+tokenizer = Tokenizer.from_file("mtggenerator.json")
+vocab_size=tokenizer.get_vocab_size()
 
 class Head(nn.Module):
     #one self attention head
@@ -139,9 +140,6 @@ model = MTGCardGenerator()
 model.load_state_dict(torch.load(model_path, map_location=torch.device('cuda')))
 model.eval()
 m=model.to(device)
-
-tokenizer = Tokenizer.from_file("mtggenerator.json")
-vocab_size=tokenizer.get_vocab_size()
 
 #create the mapping from characters to integers
 encode = lambda text: tokenizer.encode(text).ids #encode: take a string, output a list of integers

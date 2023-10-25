@@ -95,13 +95,37 @@ num_classes = 6
 
 # Create an instance of the MLPClassifier
 model = MLPClassifier(input_size, hidden_size, num_classes)
-model.load_state_dict(torch.load('type.pt'))
+model.load_state_dict(torch.load('models/type.pt'))
 model.eval()
 
 # Create an instance of the MLPClassifier
 color_model = MLPColorClassifier(input_size, hidden_size, num_classes)
-color_model.load_state_dict(torch.load('color.pt'))
+color_model.load_state_dict(torch.load('models/color.pt'))
 color_model.eval()
+
+class MLPCMCClassifier(nn.Module):
+    def __init__(self, input_size, hidden_size, num_classes):
+        super(MLPCMCClassifier, self).__init__()
+        self.fc1 = nn.Linear(input_size, hidden_size)
+        self.relu = nn.ReLU()
+        self.fc2 = nn.Linear(hidden_size, hidden_size)
+        self.relu2 = nn.ReLU()
+        self.fc3 = nn.Linear(hidden_size, num_classes)
+        self.softmax = nn.Softmax(dim=-1)
+        
+    def forward(self, x):
+        out = self.fc1(x)
+        out = self.relu(out)
+        out = self.fc2(out)
+        out = self.relu2(out)
+        out = self.fc3(out)
+        out = self.softmax(out)
+        return out
+
+# Create an instance of the MLPClassifier
+cmc_model = MLPCMCClassifier(50, 128, 8)
+cmc_model.load_state_dict(torch.load('models/cmc.pt'))
+cmc_model.eval()
 
 class Head(nn.Module):
     #one self attention head
@@ -238,29 +262,50 @@ def generate_embedding(phrase):
     return out
 
 def generate_type(cardname):
-    probs = model(torch.tensor(generate_embedding(cardname)))
+    probs = model(torch.tensor(generate_embedding(cardname), device='cpu'))
     distribution = Categorical(probs)
     sampled_index = distribution.sample()
-    for key, type in type_dict.items():
-        print(f'{type}:{probs[key]}')
+    #for key, type in type_dict.items():
+        #print(f'{type}:{probs[key]}')
     return type_dict[int(sampled_index)]
 
 def generate_color(cardname):
-    probs = color_model(torch.tensor(generate_embedding(cardname)))
+    probs = color_model(torch.tensor(generate_embedding(cardname), device='cpu'))
     distribution = Categorical(probs)
     sampled_index = distribution.sample()
-    for key, type in color_dict.items():
-        print(f'{type}:{probs[key]}')
+    #for key, type in color_dict.items():
+        #print(f'{type}:{probs[key]}')
     return color_dict[int(sampled_index)]
 
-def generate(cardname):
+def generate_cmc(cardname):
+    probs = cmc_model(torch.tensor(generate_embedding(cardname), device='cpu'))
+    distribution = Categorical(probs)
+    sampled_index = distribution.sample()
+    return sampled_index
+
+def generate_prmpt(cardname):
     type=generate_type(cardname=cardname)
     color=generate_color(cardname=cardname)
-    return f'[CLS] {cardname}: [SEP] {{{color}}} [SEP] {type} —'
+    return f'[CLS] {cardname}: [SEP] {{{color}}} [SEP] {type}'
 
-model_path='mtggenerator_v3.pt'
+model_path='models/mtggenerator_v3.pt'
 
-model = MTGCardGenerator()
-model.load_state_dict(torch.load(model_path, map_location=torch.device(device)))
-model.eval()
-m=model.to(device)
+mtg_model = MTGCardGenerator()
+mtg_model.load_state_dict(torch.load(model_path, map_location=torch.device(device)))
+mtg_model.eval()
+m=mtg_model.to(device)
+
+def generate(cardname):
+    cmc=generate_cmc(cardname)
+    context= torch.tensor([encode(generate_prmpt(cardname))], dtype=torch.long, device=device)
+    response=m.generate(context, max_new_tokens=250)[0].tolist()
+    indices = [i for i, x in enumerate(response) if x == 2]
+    slices = [response[i+1:j] for i, j in zip([0] + indices, indices + [None])]
+    out = [re.sub(r'{+\s', r'{', re.sub(r'\s+}', r'}', re.sub(r'\s+([.,!?:])', r'\1', decode(slice)))).replace('~', cardname) for slice in slices]
+    try:
+        type=out[2]
+        desc=out[3]
+    except IndexError:
+        type='Error'
+        desc='Try Again'
+    return cardname, mana, type, desc, response
