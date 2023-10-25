@@ -249,4 +249,14 @@ def generate(cardname):
     for slice in slices:
         print(decode(slice))
 
-generate('The Big Bang')
+
+def generate(cardname):
+    context= torch.tensor([encode(cardname)], dtype=torch.long, device=device)
+    response=m.generate(context, max_new_tokens=250)[0].tolist()
+    indices = [i for i, x in enumerate(response) if x == 2]
+    slices = [response[i+1:j] for i, j in zip([0] + indices, indices + [None])]
+    print(response)
+    for slice in slices:
+        print(decode(slice))
+
+generate('[CLS] Infinity Gauntlet: [SEP] {R} [SEP] Artifact')
