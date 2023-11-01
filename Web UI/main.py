@@ -7,6 +7,8 @@ card_w = 969
 card_h = 1352
 card_display_h = 50
 
+document <= DIV(DIV(Class='title') + DIV(Class='description'))
+
 
 def card_container(img_path, con_id):
     card_con = DIV(id=con_id, Class='card_container',
@@ -34,7 +36,7 @@ document['card_back'].classList.add('pointer')
 document['card_gen'].classList.add('flip_card')
 
 prompt_con = DIV(Class='prompt_container')
-prompt_con <= INPUT(id='prompt', Class='prompt_input')
+prompt_con <= INPUT(placeholder='Your card name here', id='prompt', Class='prompt_input')
 # prompt_con <= DIV('Generate', Class='generate')
 
 document <= prompt_con

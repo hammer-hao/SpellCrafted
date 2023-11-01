@@ -6,8 +6,25 @@ body {
     margin: 0;
 }
 
+.title{
+    background-image: url("img/title_bundle.png");
+    position: relative;
+    background-size: 100% 100%;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    width: 70vh;
+    top: 3vh;
+    height: calc(60vh * 432 / 1020);
+}
+
 .card_pos{
-    margin: 5vh auto 0;
+    margin: 0 auto 0;
+    position: relative;
+    left: 0;
+    right: 0;
+    top: 50%;
     transition: transform 0.8s;
     transform-style: preserve-3d;
 }
@@ -42,7 +59,7 @@ body {
     justify-content: center;
     gap: 20px;
     width: 100%;
-    margin-top: 30px;
+    margin-top: 3vh;
     /*margin-left: auto;*/
     /*margin-right: auto;*/
     /*vertical-align: middle;*/
@@ -50,12 +67,13 @@ body {
 
 .prompt_input{
     font-size: 20pt;
-    width: 200px;
-    height: 50px;
+    width: 29vh;
+    height: 5vh;
     border: black solid;
     border-radius: 25px;
     padding: 0 25px;
     box-shadow: 0 0 10px gray;
+    text-align: center;
 }
 
 .generate{
