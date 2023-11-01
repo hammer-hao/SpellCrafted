@@ -1,4 +1,4 @@
-from browser import ajax, document, bind
+from browser import ajax, document, bind, alert, window
 from browser.html import *
 import re
 import random
@@ -41,11 +41,19 @@ prompt_con <= INPUT(placeholder='Your card name here', id='prompt', Class='promp
 
 document <= prompt_con
 
-generating = DIV(Class='generating_icon')
+document <= DIV(A('About') + SPAN('|') +
+                A('Privacy policy', href='privacypolicy.html') + SPAN('|') +
+                A('Terms of service', href='termsofservice.html'), Class='bottom_links')
+
+generating = DIV(id='generate_status', Class='generating_icon')
 
 
 @bind(card_back, 'click')
 def generate(ev):
+    if document['prompt'].value == '':
+        alert("Card name can't be empty")
+        return
+
     ajax.get('http://35.170.169.132/',
              data={'prompt': document['prompt'].value},
              mode='json',
@@ -59,9 +67,18 @@ def generate(ev):
 
 
 def show_generated_card(resp):
+    @bind(generating, 'click')
+    def reset_card(ev):
+        ev.target.remove()
+        ev.target.unbind('click', reset_card)
+        card_pos.classList.remove('flip_card')
+
     resp = resp.json
+
     if resp is None:
-        generating.text = '寄'
+        alert("Spell Crafting model can't recognize your word. Please give a different one.")
+        document['generate_status'].dispatchEvent(window.MouseEvent.new("click"))
+        document['prompt'].value = ''
     else:
         card_pos.classList.add('flip_card')
         print(resp)
@@ -95,12 +112,6 @@ def show_generated_card(resp):
         des_con.style.fontSize = f"{des_con.height / des_con.scrollHeight * 100}%"
         generating.text = 'Reset'
         generating.classList.add('reset')
-
-        @bind(generating, 'click')
-        def reset_card(ev):
-            ev.target.remove()
-            ev.target.unbind('click', reset_card)
-            card_pos.classList.remove('flip_card')
 
 
 @bind(document['prompt'], 'keydown')

@@ -19,6 +19,31 @@ body {
     height: calc(60vh * 432 / 1020);
 }
 
+.bottom_links{
+    position: relative;
+    bottom: -10vh;
+    display: flex;
+    justify-content: center;
+}
+
+.bottom_links span{
+    margin: 0 5px 0;
+    color: white;
+}
+
+.bottom_links a:link{
+    color: white;
+}
+
+.bottom_links a:visited{
+    color: gold;
+}
+
+.bottom_links a:hover{
+    text-shadow: 0 0 20px #6abcc4;
+}
+
+
 .card_pos{
     margin: 0 auto 0;
     position: relative;
