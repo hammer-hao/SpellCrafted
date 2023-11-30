@@ -41,7 +41,7 @@ prompt_con <= INPUT(placeholder='Your card name here', id='prompt', Class='promp
 
 document <= prompt_con
 
-document <= DIV(A('About') + SPAN('|') +
+document <= DIV(A('GitHub', href='https://github.com/hammer-hao') + SPAN('|') +
                 A('Privacy policy', href='privacypolicy.html') + SPAN('|') +
                 A('Terms of service', href='termsofservice.html'), Class='bottom_links')
 
